@@ -424,7 +424,7 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 77879KDM34;
+				DEVELOPMENT_TEAM = 63M3QB38XB;
 				INFOPLIST_FILE = "$(SRCROOT)/Matrices-macOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.razeware.Matrices;
@@ -443,7 +443,7 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 77879KDM34;
+				DEVELOPMENT_TEAM = 63M3QB38XB;
 				INFOPLIST_FILE = "$(SRCROOT)/Matrices-macOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.razeware.Matrices;
@@ -460,7 +460,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 77879KDM34;
+				DEVELOPMENT_TEAM = 63M3QB38XB;
 				INFOPLIST_FILE = "$(SRCROOT)/Matrices-iOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.razeware.Matrices-iOS";
@@ -478,7 +478,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 77879KDM34;
+				DEVELOPMENT_TEAM = 63M3QB38XB;
 				INFOPLIST_FILE = "$(SRCROOT)/Matrices-iOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.razeware.Matrices-iOS";

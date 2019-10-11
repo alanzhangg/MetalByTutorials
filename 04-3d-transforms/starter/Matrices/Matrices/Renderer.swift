@@ -40,9 +40,9 @@ class Renderer: NSObject {
     
     var timer: Float = 0
     var uniforms = Uniforms()
-    var fov: Float = 70
+    var fov: Float = 60
     
-    var yRotationAngle: Float = 0
+    var yRotationAngle: Float = 10
     
     init(metalView: MTKView) {
         guard let device = MTLCreateSystemDefaultDevice() else {
@@ -92,16 +92,21 @@ class Renderer: NSObject {
         uniforms.viewMatrix = float4x4(translation: [0.8, 0, 0]).inverse
         let aspect = Float(metalView.frame.width) / Float(metalView.frame.height)
         uniforms.projectionMatrix = float4x4(projectionFov: radians(fromDegrees: fov), near: 0.1, far: 100, aspect: aspect)
+//        uniforms.modelMatrix = matrix_identity_float4x4
+//        uniforms.viewMatrix = matrix_identity_float4x4
+//        uniforms.projectionMatrix = matrix_identity_float4x4
     }
     
     func updateModelMatrix() {
+        let translation = float4x4(translation: [0, 0.3, 0])
+        let rotation = float4x4(rotation: [0, radians(fromDegrees: 45), 0])
         let mScale = float4x4(scaling: 0.5)
         let mRotation = float4x4(rotationX: radians(fromDegrees: yRotationAngle))
-        uniforms.modelMatrix = mRotation * mScale
+        uniforms.modelMatrix = translation * rotation
     }
     
     func updateViewMatrix() {
-        let mTranslation = float4x4(translation: [0, 0, -3]).inverse
+        let mTranslation = float4x4(translation: [0.8, 0, 0]).inverse
         let mRotation = float4x4(rotationX: radians(fromDegrees: yRotationAngle))
         uniforms.viewMatrix = mTranslation * mRotation
     }
@@ -121,9 +126,14 @@ extension Renderer: MTKViewDelegate {
                 return
         }
         
-        yRotationAngle += 0.2
+        timer += 0.05
+//        uniforms.viewMatrix = float4x4.identity()
+//        uniforms.modelMatrix = float4x4(rotationY: sin(timer))
+//        var currentTime: Float = sin(timer)
+        uniforms.viewMatrix = float4x4(translation: [0, 0, -3]).inverse
+//        yRotationAngle += 0.2
 //        updateModelMatrix()
-        updateViewMatrix()
+//        updateViewMatrix()
         
         renderEncoder.setVertexBytes(&uniforms, length: MemoryLayout<Uniforms>.stride, index: 1)
         

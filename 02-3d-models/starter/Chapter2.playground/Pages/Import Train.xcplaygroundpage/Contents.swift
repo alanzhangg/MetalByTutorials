@@ -15,13 +15,42 @@ guard let commandQueue = device.makeCommandQueue() else {
 }
 
 let allocator = MTKMeshBufferAllocator(device: device)
-let mdlMesh = MDLMesh(coneWithExtent: [1, 1, 1],
-                      segments: [10, 10],
-                      inwardNormals: false,
-                      cap: true,
-                      geometryType: .triangles,
-                      allocator: allocator)
+//let mdlMesh = MDLMesh(coneWithExtent: [1, 1, 1],
+//                      segments: [10, 10],
+//                      inwardNormals: false,
+//                      cap: true,
+//                      geometryType: .triangles,
+//                      allocator: allocator)
+guard let assetURL = Bundle.main.url(forResource: "train", withExtension: "obj") else {
+    fatalError()
+}
+let vertexDescriptor = MTLVertexDescriptor()
+vertexDescriptor.attributes[0].format = .float3
+vertexDescriptor.attributes[0].offset = 0
+vertexDescriptor.attributes[0].bufferIndex = 0
+vertexDescriptor.layouts[0].stride = MemoryLayout<SIMD3<Float>>.stride
+let meshDescriptor = MTKModelIOVertexDescriptorFromMetal(vertexDescriptor)
+(meshDescriptor.attributes[0] as! MDLVertexAttribute).name = MDLVertexAttributePosition
+let trainAsset = MDLAsset(url: assetURL, vertexDescriptor: meshDescriptor, bufferAllocator: allocator)
+let mdlMesh = trainAsset.object(at: 0) as! MDLMesh
+
 let mesh = try MTKMesh(mesh: mdlMesh, device: device)
+
+let asset = MDLAsset()
+asset.add(mdlMesh)
+
+let fileExtension = "obj"
+guard MDLAsset.canExportFileExtension(fileExtension) else {
+    fatalError("Can't export a .\(fileExtension) format")
+}
+
+do {
+    let url = playgroundSharedDataDirectory.appendingPathComponent("primitive.\(fileExtension)")
+    try asset.export(to: url)
+} catch  {
+    fatalError("Error \(error.localizedDescription)")
+}
+
 
 let shader = """
 #include <metal_stdlib> \n
@@ -64,14 +93,17 @@ renderEncoder.setVertexBuffer(mesh.vertexBuffers[0].buffer,
 
 renderEncoder.setTriangleFillMode(.lines)
 
-guard let submesh = mesh.submeshes.first else {
-  fatalError()
+//guard let submesh = mesh.submeshes.first else {
+//  fatalError()
+//}
+for submesh in mesh.submeshes {
+    renderEncoder.drawIndexedPrimitives(type: .triangle,
+    indexCount: submesh.indexCount,
+    indexType: submesh.indexType,
+    indexBuffer: submesh.indexBuffer.buffer,
+    indexBufferOffset: submesh.indexBuffer.offset)
 }
-renderEncoder.drawIndexedPrimitives(type: .triangle,
-                                    indexCount: submesh.indexCount,
-                                    indexType: submesh.indexType,
-                                    indexBuffer: submesh.indexBuffer.buffer,
-                                    indexBufferOffset: 0)
+
 
 renderEncoder.endEncoding()
 guard let drawable = view.currentDrawable else {

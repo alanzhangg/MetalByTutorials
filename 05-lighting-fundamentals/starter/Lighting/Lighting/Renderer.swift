@@ -37,7 +37,12 @@ class Renderer: NSObject {
     static var colorPixelFormat: MTLPixelFormat!
     static var library: MTLLibrary?
     
-    var depthStencilState: MTLDepthStencilState
+    lazy var depthStencilState: MTLDepthStencilState = {
+        let descriptor = MTLDepthStencilDescriptor()
+        descriptor.depthCompareFunction = .less
+        descriptor.isDepthWriteEnabled = true
+        return Renderer.device.makeDepthStencilState(descriptor: descriptor)!
+    }()
     
     var uniforms = Uniforms()
     
@@ -107,11 +112,6 @@ class Renderer: NSObject {
         Renderer.colorPixelFormat = metalView.colorPixelFormat
         Renderer.library = device.makeDefaultLibrary()
         
-        let descriptor = MTLDepthStencilDescriptor()
-        descriptor.depthCompareFunction = .less
-        descriptor.isDepthWriteEnabled = true
-        depthStencilState = device.makeDepthStencilState(descriptor: descriptor)!
-        
         super.init()
         metalView.clearColor = MTLClearColor(red: 0.2, green: 0.2,
                                              blue: 0.3, alpha: 1)
@@ -128,9 +128,9 @@ class Renderer: NSObject {
         models.append(tree)
         
         lights.append(sunlight)
-        lights.append(ambientlight)
-        lights.append(greenLight)
-        lights.append(spotLight)
+//        lights.append(ambientlight)
+//        lights.append(greenLight)
+//        lights.append(spotLight)
         fragmentUniforms.lightCount = UInt32(lights.count)
     }
     

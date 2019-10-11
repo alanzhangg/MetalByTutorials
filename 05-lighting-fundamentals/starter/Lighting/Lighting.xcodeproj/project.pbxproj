@@ -490,7 +490,7 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 77879KDM34;
+				DEVELOPMENT_TEAM = 63M3QB38XB;
 				INFOPLIST_FILE = "$(SRCROOT)/Lighting-macOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.razeware.Lighting;
@@ -508,7 +508,7 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 77879KDM34;
+				DEVELOPMENT_TEAM = 63M3QB38XB;
 				INFOPLIST_FILE = "$(SRCROOT)/Lighting-macOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.razeware.Lighting;
