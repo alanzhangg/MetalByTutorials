@@ -68,9 +68,18 @@ class Renderer: NSObject {
     
     lazy var ambientlight: Light = {
         var light = buildDefaultLight()
-        light.color = [1.0, 0, 0]
-        light.intensity = 0.3
+        light.color = [0.5, 1, 0]
+        light.intensity = 0.1
         light.type = Ambientlight
+        return light
+    }()
+    
+    lazy var redLight: Light = {
+        var light = buildDefaultLight()
+        light.position = [-0, 0.5, -0.5]
+        light.color = [1, 0, 0]
+        light.attenuation = float3(1, 3, 4)
+        light.type = Pointlight
         return light
     }()
     
@@ -123,14 +132,15 @@ class Renderer: NSObject {
         train.position = [0, 0, 0]
         models.append(train)
         
+        
         let tree = Model(name: "treefir")
-        tree.position = [1.4, 0, 0]
+        tree.position = [2, 0, 0]
         models.append(tree)
         
         lights.append(sunlight)
-//        lights.append(ambientlight)
-//        lights.append(greenLight)
-//        lights.append(spotLight)
+        lights.append(ambientlight)
+        lights.append(redLight)
+        lights.append(spotLight)
         fragmentUniforms.lightCount = UInt32(lights.count)
     }
     
@@ -211,10 +221,10 @@ extension Renderer: MTKViewDelegate {
             }
         }
         
-//        debugLights(renderEncoder: renderEncoder, lightType: Sunlight)
+//        debugLights(renderEncoder: renderEncoder, lightType: Pointlight)
 //        debugLights(renderEncoder: renderEncoder, lightType: Ambientlight)
         debugLights(renderEncoder: renderEncoder, lightType: Spotlight)
-        debugLights(renderEncoder: renderEncoder, lightType: Pointlight)
+//        debugLights(renderEncoder: renderEncoder, lightType: Pointlight)
         
         renderEncoder.endEncoding()
         guard let drawable = view.currentDrawable else {

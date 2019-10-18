@@ -60,12 +60,12 @@ vertex VertexOut vertex_main(const VertexIn vertexIn [[ stage_in ]],
 fragment float4 fragment_main(VertexOut in [[stage_in]],
                               constant Light *lights [[buffer(BufferIndexLights)]],
                               constant FragmentUniforms &fragmentUniforms [[ buffer(BufferIndexFragmentUniforms)]],
-                              texture2d<float> baseColorTexture [[ texture(BaseColorTexture) ]])
+                              texture2d<float> baseColorTexture [[ texture(BaseColorTexture) ]],
+                              sampler textureSampler [[sampler(0)]])
 {
-    constexpr sampler textureSampler(filter::linear,
-                                     address::repeat,
-                                     mip_filter::linear,
-                                     max_anisotropy(16));
+//    constexpr sampler textureSampler(filter::linear,
+//                                     address::repeat);
+//    baseColorTexture.sample(textureSampler, in.uv * fragmentUniforms.tiling).rgb;
     float3 baseColor = baseColorTexture.sample(textureSampler, in.uv * fragmentUniforms.tiling).rgb;
     return float4(baseColor, 1.0);
     

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4BF0DC6C23599F8700D098AC /* PBR.metal in Sources */ = {isa = PBXBuildFile; fileRef = 82E4EB04207E2AAC0015A057 /* PBR.metal */; };
+		4BF0DC6D23599F8700D098AC /* PBR.metal in Sources */ = {isa = PBXBuildFile; fileRef = 82E4EB04207E2AAC0015A057 /* PBR.metal */; };
 		820F018C20652A6B00264B35 /* Textures.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 820F018B20652A6B00264B35 /* Textures.xcassets */; };
 		820F018D20652A6B00264B35 /* Textures.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 820F018B20652A6B00264B35 /* Textures.xcassets */; };
 		8243D7542050CB5C00EE083D /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F2C22C204518D40082FDE6 /* Node.swift */; };
@@ -318,6 +320,7 @@
 				82A270DD1FB9123C004D47F2 /* ViewController.swift in Sources */,
 				829618581FB943BD00CBB303 /* Renderer.swift in Sources */,
 				82506A1620411D5F00D21A0B /* ViewControllerExtension.swift in Sources */,
+				4BF0DC6C23599F8700D098AC /* PBR.metal in Sources */,
 				829618561FB91EF100CBB303 /* LocalClasses.swift in Sources */,
 				8278FC5B20651EEA00D81B41 /* Texturable.swift in Sources */,
 				826B79D12046DA87008B030C /* Submesh.swift in Sources */,
@@ -337,6 +340,7 @@
 				8243D7542050CB5C00EE083D /* Node.swift in Sources */,
 				82A271301FB918A8004D47F2 /* ViewController.swift in Sources */,
 				8243D7552050CB6200EE083D /* Model.swift in Sources */,
+				4BF0DC6D23599F8700D098AC /* PBR.metal in Sources */,
 				8296185F1FB9532700CBB303 /* Shaders.metal in Sources */,
 				8278FC5C20651EEA00D81B41 /* Texturable.swift in Sources */,
 				82506A1A20411D9300D21A0B /* RendererExtension.swift in Sources */,
@@ -497,7 +501,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Materials-macOS/Materials.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 63M3QB38XB;
 				INFOPLIST_FILE = "$(SRCROOT)/Materials-macOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.razeware.Materials;
@@ -513,7 +517,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Materials-macOS/Materials.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 63M3QB38XB;
 				INFOPLIST_FILE = "$(SRCROOT)/Materials-macOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.razeware.Materials;
@@ -528,7 +532,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 63M3QB38XB;
 				INFOPLIST_FILE = "$(SRCROOT)/Materials-iOS/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -546,7 +550,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 63M3QB38XB;
 				INFOPLIST_FILE = "$(SRCROOT)/Materials-iOS/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

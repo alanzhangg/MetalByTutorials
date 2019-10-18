@@ -36,13 +36,16 @@ class Submesh {
   struct Textures {
     let baseColor: MTLTexture?
     let normal: MTLTexture?
+    let roughness: MTLTexture?
   }
   let textures: Textures
   let pipelineState: MTLRenderPipelineState!
-
+    let material: Material
+    
   init(submesh: MTKSubmesh, mdlSubmesh: MDLSubmesh) {
     self.submesh = submesh
     textures = Textures(material: mdlSubmesh.material)
+    material = Material(material: mdlSubmesh.material)
     pipelineState = Submesh.makePipelineState(textures: textures)
   }
 }
@@ -50,9 +53,16 @@ class Submesh {
 // Pipeline state
 private extension Submesh {
   static func makePipelineState(textures: Textures) -> MTLRenderPipelineState {
+    let functionContants = makeFunctionConstants(textures: textures)
     let library = Renderer.library
     let vertexFunction = library?.makeFunction(name: "vertex_main")
-    let fragmentFunction = library?.makeFunction(name: "fragment_main")
+//    let fragmentFunction = library?.makeFunction(name: "fragment_main")
+    let fragmentFunction : MTLFunction?
+    do {
+        fragmentFunction = try library?.makeFunction(name: "fragment_mainPBR", constantValues: functionContants)
+    } catch {
+        fatalError("No Metal function exists")
+    }
     
     var pipelineState: MTLRenderPipelineState
     let pipelineDescriptor = MTLRenderPipelineDescriptor()
@@ -69,6 +79,21 @@ private extension Submesh {
     }
     return pipelineState
   }
+    
+    static func makeFunctionConstants(textures: Textures) -> MTLFunctionConstantValues{
+        let functionContants = MTLFunctionConstantValues()
+        var property = textures.baseColor != nil
+        functionContants.setConstantValue(&property, type: .bool, index: 0)
+        property = textures.normal != nil
+        functionContants.setConstantValue(&property, type: .bool, index: 1)
+        property = textures.roughness != nil
+        functionContants.setConstantValue(&property, type: .bool, index: 2)
+        property = false
+        functionContants.setConstantValue(&property, type: .bool, index: 3)
+        functionContants.setConstantValue(&property, type: .bool, index: 4)
+        return functionContants
+    }
+    
 }
 
 extension Submesh: Texturable {}
@@ -86,6 +111,25 @@ private extension Submesh.Textures {
     }
     baseColor = property(with: .baseColor)
     normal = property(with: .tangentSpaceNormal)
+    roughness = property(with: .roughness)
   }
+}
+
+private extension Material{
+    init(material: MDLMaterial?) {
+        self.init()
+        if let baseColor = material?.property(with: .baseColor), baseColor.type == .float3 {
+            self.baseColor = baseColor.float3Value
+        }
+        if let specular = material?.property(with: .specular), specular.type == .float3 {
+            self.specularColor = specular.float3Value
+        }
+        if let shininess = material?.property(with: .specularExponent), shininess.type == .float{
+            self.shininess = shininess.floatValue
+        }
+        if let roughness = material?.property(with: .roughness), roughness.type == .float3{
+            self.roughness = roughness.floatValue
+        }
+    }
 }
 

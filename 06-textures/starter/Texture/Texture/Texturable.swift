@@ -44,7 +44,7 @@ extension Texturable {
         let textureLoaderOptions: [MTKTextureLoader.Option: Any] = [
             .origin: MTKTextureLoader.Origin.bottomLeft,
             .SRGB: false,
-            .generateMipmaps: true
+            .generateMipmaps: NSNumber(booleanLiteral: true)
         ]
         
         // 3
@@ -59,6 +59,7 @@ extension Texturable {
                 print("Failed to load \(imageName)\n - loading from Assets Catalog")
                 
                 return try textureLoader.newTexture(name: imageName, scaleFactor: 1.0, bundle: Bundle.main, options: nil)
+//                return nil
         }
         
         let texture = try textureLoader.newTexture(URL: url,

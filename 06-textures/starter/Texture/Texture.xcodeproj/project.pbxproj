@@ -47,10 +47,6 @@
 		82A4EE32206378F4005F0BF5 /* lowpoly-house-color.png in Resources */ = {isa = PBXBuildFile; fileRef = 82A4EE2D206378F4005F0BF5 /* lowpoly-house-color.png */; };
 		82A4EE33206378F4005F0BF5 /* lowpoly-house.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 82A4EE2E206378F4005F0BF5 /* lowpoly-house.mtl */; };
 		82A4EE34206378F4005F0BF5 /* lowpoly-house.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 82A4EE2E206378F4005F0BF5 /* lowpoly-house.mtl */; };
-		82F04868206514D100417C57 /* lowpoly-barn-color.png in Resources */ = {isa = PBXBuildFile; fileRef = 82F04866206514D100417C57 /* lowpoly-barn-color.png */; };
-		82F04869206514D100417C57 /* lowpoly-barn-color.png in Resources */ = {isa = PBXBuildFile; fileRef = 82F04866206514D100417C57 /* lowpoly-barn-color.png */; };
-		82F0486A206514D100417C57 /* green-grass.png in Resources */ = {isa = PBXBuildFile; fileRef = 82F04867206514D100417C57 /* green-grass.png */; };
-		82F0486B206514D100417C57 /* green-grass.png in Resources */ = {isa = PBXBuildFile; fileRef = 82F04867206514D100417C57 /* green-grass.png */; };
 		82F2C22B204518CD0082FDE6 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F2C22A204518CD0082FDE6 /* Model.swift */; };
 		82F2C22D204518D40082FDE6 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F2C22C204518D40082FDE6 /* Node.swift */; };
 /* End PBXBuildFile section */
@@ -86,8 +82,6 @@
 		82A4EE2C206378F4005F0BF5 /* lowpoly-house.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "lowpoly-house.obj"; sourceTree = "<group>"; };
 		82A4EE2D206378F4005F0BF5 /* lowpoly-house-color.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "lowpoly-house-color.png"; sourceTree = "<group>"; };
 		82A4EE2E206378F4005F0BF5 /* lowpoly-house.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "lowpoly-house.mtl"; sourceTree = "<group>"; };
-		82F04866206514D100417C57 /* lowpoly-barn-color.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "lowpoly-barn-color.png"; sourceTree = "<group>"; };
-		82F04867206514D100417C57 /* green-grass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "green-grass.png"; sourceTree = "<group>"; };
 		82F2C22A204518CD0082FDE6 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		82F2C22C204518D40082FDE6 /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -216,8 +210,6 @@
 		82F04865206514C000417C57 /* Textures */ = {
 			isa = PBXGroup;
 			children = (
-				82F04867206514D100417C57 /* green-grass.png */,
-				82F04866206514D100417C57 /* lowpoly-barn-color.png */,
 			);
 			path = Textures;
 			sourceTree = "<group>";
@@ -307,13 +299,11 @@
 			files = (
 				82A4EE31206378F4005F0BF5 /* lowpoly-house-color.png in Resources */,
 				8287AF4A20638D86009CD3E3 /* plane.obj in Resources */,
-				82F04868206514D100417C57 /* lowpoly-barn-color.png in Resources */,
 				82A270DF1FB9123C004D47F2 /* Assets.xcassets in Resources */,
 				82A270E21FB9123C004D47F2 /* Main.storyboard in Resources */,
 				8287AF4C20638D86009CD3E3 /* plane.mtl in Resources */,
 				82A4EE33206378F4005F0BF5 /* lowpoly-house.mtl in Resources */,
 				8287AF5020638DD1009CD3E3 /* ground.png in Resources */,
-				82F0486A206514D100417C57 /* green-grass.png in Resources */,
 				20415F6D22BCD7AD00A1D917 /* Textures.xcassets in Resources */,
 				82A4EE2F206378F4005F0BF5 /* lowpoly-house.obj in Resources */,
 			);
@@ -328,11 +318,9 @@
 				8287AF5120638DD1009CD3E3 /* ground.png in Resources */,
 				82A4EE34206378F4005F0BF5 /* lowpoly-house.mtl in Resources */,
 				82A271271FB917DD004D47F2 /* Assets.xcassets in Resources */,
-				82F04869206514D100417C57 /* lowpoly-barn-color.png in Resources */,
 				8287AF4D20638D86009CD3E3 /* plane.mtl in Resources */,
 				82A4EE32206378F4005F0BF5 /* lowpoly-house-color.png in Resources */,
 				82A271251FB917DD004D47F2 /* Main.storyboard in Resources */,
-				82F0486B206514D100417C57 /* green-grass.png in Resources */,
 				8287AF4B20638D86009CD3E3 /* plane.obj in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

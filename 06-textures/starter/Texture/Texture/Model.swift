@@ -59,6 +59,7 @@ class Model: Node {
     let mesh: MTKMesh
     let pipelineState: MTLRenderPipelineState
     let submeshes: [Submesh]
+    let samplerState: MTLSamplerState?
     
     var tiling: UInt32 = 1
     
@@ -82,8 +83,19 @@ class Model: Node {
             ?? []
         
         pipelineState = Model.buildPipelineState(vertexDescriptor: mdlMesh.vertexDescriptor)
+        samplerState = Model.buildSamplerState()
         super.init()
         
+    }
+    
+    private static func buildSamplerState() -> MTLSamplerState?{
+        let descriptor = MTLSamplerDescriptor()
+        descriptor.sAddressMode = .repeat
+        descriptor.tAddressMode = .repeat
+        descriptor.minFilter = .linear
+        descriptor.maxAnisotropy = 8
+        let samplerState = Renderer.device.makeSamplerState(descriptor: descriptor)
+        return samplerState
     }
     
     private static func buildPipelineState(vertexDescriptor: MDLVertexDescriptor) -> MTLRenderPipelineState {

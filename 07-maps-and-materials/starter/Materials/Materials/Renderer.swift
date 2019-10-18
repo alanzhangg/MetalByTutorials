@@ -43,7 +43,7 @@ class Renderer: NSObject {
   
   lazy var camera: Camera = {
     let camera = Camera()
-    camera.position = [0, 2, -6]
+    camera.position = [0, 0, -3]
     return camera
   }()
 
@@ -70,7 +70,7 @@ class Renderer: NSObject {
     mtkView(metalView, drawableSizeWillChange: metalView.bounds.size)
 
     // models
-    let model = Model(name: "cottage1")
+    let model = Model(name: "cube")
     model.position = [0, 0, 0]
     model.rotation = [0, radians(fromDegrees: 45), 0]
     models.append(model)
@@ -132,17 +132,26 @@ extension Renderer: MTKViewDelegate {
       // render multiple buffers
       // replace the following line
       // this line only sends the MTLBuffer containing position, normal and UV
-      renderEncoder.setVertexBuffer(model.vertexBuffer, offset: 0,
-                                    index: Int(BufferIndexVertices.rawValue))
-      
+//      renderEncoder.setVertexBuffer(model.vertexBuffer, offset: 0,
+//                                    index: Int(BufferIndexVertices.rawValue))
+        for (index, vertexBuffer) in model.mesh.vertexBuffers.enumerated() {
+          renderEncoder.setVertexBuffer(vertexBuffer.buffer,
+                                        offset: 0, index: index)
+        }
+        
       for modelSubmesh in model.submeshes {
         renderEncoder.setRenderPipelineState(modelSubmesh.pipelineState)
         renderEncoder.setFragmentTexture(modelSubmesh.textures.baseColor,
                                          index: Int(BaseColorTexture.rawValue))
         renderEncoder.setFragmentTexture(modelSubmesh.textures.normal,
                                          index: Int(NormalTexture.rawValue))
+        renderEncoder.setFragmentTexture(modelSubmesh.textures.roughness, index: 2)
 
         // set the materials here
+        var material = modelSubmesh.material
+        renderEncoder.setFragmentBytes(&material,
+                                       length: MemoryLayout<Material>.stride,
+                                       index: Int(BufferIndicesMaterials.rawValue))
 
         
         let submesh = modelSubmesh.submesh

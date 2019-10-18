@@ -67,6 +67,12 @@ class Model: Node {
     
     // add tangent and bitangent here
     
+//    mdlMesh.addNormals(withAttributeNamed: MDLVertexAttributeNormal, creaseThreshold: 1.0)
+    
+    mdlMesh.addTangentBasis(forTextureCoordinateAttributeNamed: MDLVertexAttributeTextureCoordinate,
+                            tangentAttributeNamed: MDLVertexAttributeTangent,
+                            bitangentAttributeNamed: MDLVertexAttributeBitangent)
+    
     Model.defaultVertexDescriptor = mdlMesh.vertexDescriptor
     let mesh = try! MTKMesh(mesh: mdlMesh, device: Renderer.device)
     self.mesh = mesh

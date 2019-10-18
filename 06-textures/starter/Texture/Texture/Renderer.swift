@@ -160,6 +160,7 @@ extension Renderer: MTKViewDelegate {
                 
                 // set the fragment texture here
                 renderEncoder.setFragmentTexture(modelSubmesh.textures.baseColor, index: Int(BaseColorTexture.rawValue))
+                renderEncoder.setFragmentSamplerState(model.samplerState, index: 0)
                 
                 let submesh = modelSubmesh.submesh
                 renderEncoder.drawIndexedPrimitives(type: .triangle,
