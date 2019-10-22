@@ -51,7 +51,7 @@ class Node {
     
     var modelMatrix: float4x4 {
         let translateMatrix = float4x4(translation: position)
-        let rotateMatrix = float4x4(rotation: rotation)
+        let rotateMatrix = float4x4(quaternion)
         let scaleMatrix = float4x4(scaling: [scale.x, scale.y, -scale.z])
         return translateMatrix * rotateMatrix * scaleMatrix
     }

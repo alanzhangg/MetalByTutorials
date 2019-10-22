@@ -69,6 +69,13 @@ class Renderer: NSObject {
         mtkView(metalView, drawableSizeWillChange: metalView.bounds.size)
         
         // models
+//        let ball = Prop(name: "beachball")
+//        ball.scale = [1, 1, 1]
+//        ball.position = [0, 3, 0]
+//        models.append(ball)
+        let skeleton = Character(name: "skeletonWave")
+        models.append(skeleton)
+        
         let ground = Prop(name: "ground")
         ground.scale = [10, 10, 10]
         models.append(ground)
@@ -88,18 +95,16 @@ class Renderer: NSObject {
 extension Renderer: MTKViewDelegate {
     
 //    func update(deltaTime: Float) {
-//        let gravity: Float = 9.8 // meter / sec2
+//        currentTime += deltaTime * 4
+//        let ball = models[0] as! Prop
+//        let gravity: Float = 9.8
 //        let mass: Float = 0.05
-//        let acceleration = gravity / mass
+//        let acceleration: Float = gravity / mass
 //        let airFriction: Float = 0.2
 //        let bounciness: Float = 0.9
 //        let timeStep: Float = 1 / 600
-//
-//        currentTime += deltaTime * 4
-//        let ball = models[0]
 //        ballVelocity += (acceleration * timeStep) / airFriction
 //        maxVelocity = max(maxVelocity, abs(ballVelocity))
-//
 //        ball.position.y -= ballVelocity * timeStep
 //        if ball.position.y <= ball.size.y / 2 {
 //            ball.position.y = ball.size.y / 2
@@ -108,16 +113,30 @@ extension Renderer: MTKViewDelegate {
 //            ball.scale.z = 1 + (1 - ball.scale.y) / 2
 //            ball.scale.x = ball.scale.z
 //        }
-//
 //        if ball.scale.y < 1 {
 //            let change: Float = 0.07
 //            ball.scale.y += change
-//            ball.scale.z -= change / 2
+//            ball.scale.z -= change
 //            ball.scale.x = ball.scale.z
-//            if ball.scale.y > 1 {
+//            if  ball.scale.y > 1 {
 //                ball.scale = [1, 1, 1]
 //            }
 //        }
+//    }
+    
+//    func update(deltaTime: Float) {
+//        currentTime += deltaTime
+//        let ball = models[0] as! Node
+//        ball.position.y = ball.size.y
+//        let animation = Animation()
+//        animation.translations = generateBallTranslations()
+//        animation.rotations = generateBallRotations()
+//        ball.position = animation.getTranslation(time: currentTime) ?? float3(0)
+//        ball.position.y += ball.size.y / 2
+//        ball.quaternion = animation.getRotation(time: currentTime) ?? simd_quatf();
+//        let fps = Float(60)
+//        let currentFrame = Int(currentTime * fps) % (ballPositionXArray.count)
+//        ball.position.x = ballPositionXArray[currentFrame]
 //    }
     
     func update(deltaTime: Float) {
