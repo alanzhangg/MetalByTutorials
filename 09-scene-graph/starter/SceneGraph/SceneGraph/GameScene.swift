@@ -37,26 +37,28 @@ class GameScene: Scene {
     let car = Prop(name: "racing-car")
     let skeleton = Character(name: "skeleton")
     
-    var inCar = true
+    var inCar = false
     
     override func setupScene() {
         ground.tiling = 32
         add(node: ground)
         car.rotation = [0, radians(fromDegrees: 90), 0]
-        car.position = [-0.8, 0, 0]
+        car.position = [0, 0, 0]
         add(node: car)
         skeleton.position = [-0.35, -0.2, -0.35]
+//        skeleton.rotation.y = .pi
+//        add(node: skeleton)
         add(node: skeleton, parent: car)
-        skeleton.runAnimation(name: "Armature_idle")
+        skeleton.runAnimation(name: "Armature_sit")
         skeleton.pauseAnimation()
-        camera.position = [0, 0, -4]
+        camera.position = [0, 1.2, -4]
         
         inputController.player = camera
         inputController.keyboardDelegate = self
     }
     
     override func updateScene(deltaTime: Float) {
-        
+//        car.position.x += 0.02
     }
 }
 
@@ -70,9 +72,19 @@ extension GameScene: KeyboardDelegate {
                 remove(node: skeleton)
                 remove(node: car)
                 add(node: car, parent: camera)
-                car.position = [0.35, -1, 0.1]
+                car.position = [0.35, -0.7, 0.1]
                 car.rotation = [0, 0, 0]
                 inputController.translationSpeed = 10.0
+            }
+            if inCar {
+                remove(node: car)
+                add(node: car)
+                car.position = camera.position * (camera.rightVector * 1.3)
+                car.position.y = 0
+                car.rotation = camera.rotation
+                inputController.translationSpeed = 2.0
+            }else{
+                
             }
             inCar = !inCar
             return false

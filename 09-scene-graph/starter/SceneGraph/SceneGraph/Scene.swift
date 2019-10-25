@@ -53,6 +53,7 @@ class Scene {
     init(sceneSize: CGSize) {
         self.sceneSize = sceneSize
         setupScene()
+        sceneSizeWillChange(to: sceneSize)
     }
     
     func setupScene() {

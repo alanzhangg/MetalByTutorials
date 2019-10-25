@@ -46,6 +46,10 @@ class Node {
         return normalize([sin(rotation.y), 0, cos(rotation.y)])
     }
     
+    var rightVector: float3{
+        return [forwardVector.z, forwardVector.y, -forwardVector.x]
+    }
+    
     var boundingBox = MDLAxisAlignedBoundingBox()
     var size: float3 {
         return boundingBox.maxBounds - boundingBox.minBounds
@@ -84,8 +88,8 @@ class Node {
             children.append(child)
         }
         childNode.children = []
-        guard let index = children.firstIndex(where: { (node) -> Bool in
-            return node === childNode
+        guard let index = (children.index{
+            $0 === childNode
         }) else {
             return
         }
