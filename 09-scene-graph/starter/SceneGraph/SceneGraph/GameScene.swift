@@ -36,6 +36,7 @@ class GameScene: Scene {
     let ground = Prop(name: "large-plane")
     let car = Prop(name: "racing-car")
     let skeleton = Character(name: "skeleton")
+    let orthoCamera = OrthographicCamera()
     
     var inCar = false
     
@@ -45,21 +46,40 @@ class GameScene: Scene {
         car.rotation = [0, radians(fromDegrees: 90), 0]
         car.position = [0, 0, 0]
         add(node: car)
-        skeleton.position = [-0.35, -0.2, -0.35]
+//        skeleton.position = [-0.35, -0.2, -0.35]
 //        skeleton.rotation.y = .pi
-//        add(node: skeleton)
-        add(node: skeleton, parent: car)
-        skeleton.runAnimation(name: "Armature_sit")
+//        add(node: skeleton, parent: car)
+        skeleton.position = [1.2, 0, 0]
+        add(node: skeleton)
+        skeleton.runAnimation(name: "Armature_walk")
+        skeleton.currentAnimation?.speed = 3.0
         skeleton.pauseAnimation()
         camera.position = [0, 1.2, -4]
-        
-        inputController.player = camera
+        inputController.player = skeleton
         inputController.keyboardDelegate = self
+        
+        orthoCamera.position = [0, 2, 0]
+        orthoCamera.rotation.x = .pi / 2
+        cameras.append(orthoCamera)
+        let tpCamera = ThirdPersonCamera(focus: skeleton)
+        cameras.append(tpCamera)
+        currentCameraIndex = 2
     }
     
     override func updateScene(deltaTime: Float) {
 //        car.position.x += 0.02
     }
+    
+    override func sceneSizeWillChange(to size: CGSize) {
+        super.sceneSizeWillChange(to: size)
+        let cameraSize: Float = 10
+        let ratio = Float(sceneSize.width / sceneSize.height)
+        let rect = Rectangle(left: -cameraSize * ratio,
+                             right: cameraSize * ratio,
+                             top: cameraSize, bottom: -cameraSize)
+        orthoCamera.rect = rect
+    }
+    
 }
 
 extension GameScene: KeyboardDelegate {
@@ -88,6 +108,19 @@ extension GameScene: KeyboardDelegate {
             }
             inCar = !inCar
             return false
+        case .key0:
+            currentCameraIndex = 0
+        case .key1:
+            currentCameraIndex = 1
+        case .key2:
+            currentCameraIndex = 2
+        case .w, .s, .a, .d:
+            if state == .began{
+                skeleton.resumeAnimation()
+            }
+            if state == .ended {
+                skeleton.pauseAnimation()
+            }
         default:
             break
         }
