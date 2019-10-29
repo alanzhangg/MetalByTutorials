@@ -44,6 +44,7 @@ class Scene {
     var rootNode = Node()
     var renderables = [Renderable]()
     var uniforms = Uniforms()
+    let physicsController = PhysicsController()
     
     var currentCameraIndex = 0
     var camera: Camera  {
@@ -80,7 +81,16 @@ class Scene {
     }
     
     private func updatePlayer(deltaTime: Float) {
+        guard let node = inputController.player else {
+            return
+        }
+        let holdPosition = node.position
+        let holdRotation = node.rotation
         inputController.updatePlayer(deltaTime: deltaTime)
+        if physicsController.checkCollisions() && !updateCollidedPlayer() {
+            node.position = holdPosition
+            node.rotation = holdRotation
+        }
     }
     
     final func add(node: Node, parent: Node? = nil, render: Bool = true) {
@@ -117,5 +127,9 @@ class Scene {
             camera.aspect = Float(size.width / size.height)
         }
         sceneSize = size
+    }
+    func updateCollidedPlayer() -> Bool {
+        
+        return false
     }
 }

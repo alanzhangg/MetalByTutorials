@@ -40,7 +40,7 @@ class ViewController: LocalViewController {
     }
 
     renderer = Renderer(metalView: metalView)
-    let scene = GameScene(sceneSize: metalView.bounds.size)
+    let scene = CarScene(sceneSize: metalView.bounds.size)
     renderer?.scene = scene
     
     if let gameView = metalView as? GameView {

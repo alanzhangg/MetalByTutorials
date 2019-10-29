@@ -68,8 +68,25 @@ class CarScene: Scene {
     orthoCamera.rotation.x = .pi / 2
     cameras.append(orthoCamera)
     
+    physicsController.dynamicBody = car
+    for body in bodies {
+        physicsController.addStaticBody(node: body)
+    }
+    physicsController.holdAllCollided = true
   }
   
+    override func updateCollidedPlayer() -> Bool {
+        for body in physicsController.collidedBodies {
+            if body.name == "oilcan" {
+                print("power-up")
+                remove(node: body)
+                physicsController.removeBody(node: body)
+                return true
+            }
+        }
+        return false
+    }
+    
   override func sceneSizeWillChange(to size: CGSize) {
     super.sceneSizeWillChange(to: size)
     let cameraSize: Float = 10

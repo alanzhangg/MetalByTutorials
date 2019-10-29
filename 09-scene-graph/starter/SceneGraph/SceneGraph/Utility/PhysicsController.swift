@@ -31,11 +31,13 @@
 import MetalKit
 
 // Render bounding boxes
-let debugRenderBoundingBox = false
+let debugRenderBoundingBox = true
 class PhysicsController {
   
   var dynamicBody: Node?
   var staticBodies: [Node] = []
+    var holdAllCollided = false
+    var collidedBodies: [Node] = []
   
   func addStaticBody(node: Node) {
     removeBody(node: node)
@@ -49,4 +51,27 @@ class PhysicsController {
       staticBodies.remove(at: index)
     }
   }
+    
+    func checkCollisions() -> Bool {
+        collidedBodies = []
+        guard let node = dynamicBody else {
+            return false
+        }
+        let nodeRadius = max((node.size.x / 2), (node.size.z / 2))
+        let nodePosition = node.worldMatrix.columns.3.xyz
+        for body in staticBodies {
+            let bodyRadius = max((body.size.x / 2), (body.size.z / 2))
+            let bodyPosition = body.worldMatrix.columns.3.xyz
+            let d = distance(nodePosition, bodyPosition)
+            if d < (nodeRadius + bodyRadius) {
+                if holdAllCollided {
+                    collidedBodies.append(body)
+                }else{
+                    return true
+                }
+                return true
+            }
+        }
+        return collidedBodies.count != 0
+    }
 }

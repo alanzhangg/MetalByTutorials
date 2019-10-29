@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		2047126122C1F6890011118D /* Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2047126022C1F6890011118D /* Scene.swift */; };
 		2047126322C1FC2B0011118D /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2047126222C1FC2B0011118D /* GameScene.swift */; };
+		4BB913CA2368381D00B9ADC6 /* CarScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 828191F520B2D33C00B74149 /* CarScene.swift */; };
 		8200EF8920A93DD600235737 /* skeleton.gltf in Resources */ = {isa = PBXBuildFile; fileRef = 8200EF8720A93DD500235737 /* skeleton.gltf */; };
 		8200EF8A20A93DD600235737 /* buffer_skeleton.bin in Resources */ = {isa = PBXBuildFile; fileRef = 8200EF8820A93DD500235737 /* buffer_skeleton.bin */; };
 		8200EF8D20A9503400235737 /* large-plane.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 8200EF8B20A9503400235737 /* large-plane.mtl */; };
@@ -362,6 +363,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				82DDA8D620904EBF00EB2A9B /* CharacterShaders.metal in Sources */,
+				4BB913CA2368381D00B9ADC6 /* CarScene.swift in Sources */,
 				82330E3A20B1263F001CBFEF /* DebugBoundingBox.metal in Sources */,
 				2047126122C1F6890011118D /* Scene.swift in Sources */,
 				826B79CE2046DA3F008B030C /* Camera.swift in Sources */,
