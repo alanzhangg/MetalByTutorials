@@ -38,6 +38,17 @@ public class Renderer: NSObject {
   var depthStencilState: MTLDepthStencilState!
   var texture: MTLTexture?
   var terrainTexture: MTLTexture?
+    var treePipelineState: MTLRenderPipelineState!
+    var transparencyEnabled = false
+    var windowTexture: MTLTexture?
+    var window2Texture: MTLTexture?
+    var windowPipelineState: MTLRenderPipelineState!
+    var blendingEnbled = false
+    var antialiasingEnabled = false
+    var treePipelineStateAA: MTLRenderPipelineState!
+    var windowPipelineStateAA: MTLRenderPipelineState!
+    var fogEnabled = false
+    
   
   let camera = Camera()
 
@@ -66,6 +77,19 @@ public class Renderer: NSObject {
     }
   }()
   var terrainTransform = Transform()
+    
+    lazy var window: MTKMesh = {
+        do{
+            let primitive = self.loadModel(name: "plane")!
+            let model = try MTKMesh(mesh: primitive, device: device)
+            windowTexture = loadTexture(imageName: "windowColor")
+            return model
+        }catch{
+            fatalError()
+        }
+    }()
+    var windowTransform = Transform()
+    var window2Transform = Transform()
 
   public init(metalView: MTKView) {
     guard let device = MTLCreateSystemDefaultDevice() else {
@@ -88,6 +112,15 @@ public class Renderer: NSObject {
     camera.transform.position = [0, 2.5, -1]
     modelTransform.position = [0, 0, 6]
     terrainTransform.scale = [50, 50, 50]
+    
+    windowTransform.scale = [2, 2, 2]
+    windowTransform.position = [0, 3, 4]
+    windowTransform.rotation = [-Float.pi / 2, 0, 0]
+    
+    window2Transform.scale = [2, 2, 2]
+    window2Transform.position = [0, 2.75, 3]
+    window2Transform.rotation = [-Float.pi / 2, 0, 0]
+    
   }
   
   func loadModel(name: String) -> MDLMesh? {
@@ -142,6 +175,33 @@ public class Renderer: NSObject {
       descriptor.fragmentFunction = fragmentFunction
       descriptor.vertexDescriptor = MTKMetalVertexDescriptorFromModelIO(model.vertexDescriptor)
       pipelineState = try device.makeRenderPipelineState(descriptor: descriptor)
+        
+        let treeFragmentFunction = library.makeFunction(name: "fragment_tree")
+        descriptor.fragmentFunction = treeFragmentFunction
+        let lightVertexFunction = library.makeFunction(name: "vertex_light")
+        descriptor.vertexFunction = lightVertexFunction
+        treePipelineState = try device.makeRenderPipelineState(descriptor: descriptor)
+        
+        descriptor.sampleCount = 4
+        treePipelineStateAA = try device.makeRenderPipelineState(descriptor: descriptor)
+        descriptor.sampleCount = 1
+        
+        let windowFragmentFunction = library.makeFunction(name: "fragment_window")
+        descriptor.fragmentFunction = windowFragmentFunction
+        descriptor.vertexFunction = lightVertexFunction
+        guard let attachment = descriptor.colorAttachments[0] else {
+            return
+        }
+        attachment.isBlendingEnabled = true
+        attachment.rgbBlendOperation = .add
+        attachment.sourceRGBBlendFactor = .sourceAlpha
+        attachment.destinationRGBBlendFactor = .oneMinusSourceAlpha
+        windowPipelineState = try device.makeRenderPipelineState(descriptor: descriptor)
+        
+        descriptor.sampleCount = 4
+        windowPipelineStateAA = try device.makeRenderPipelineState(descriptor: descriptor)
+        descriptor.sampleCount = 1
+        
     } catch let error {
       fatalError(error.localizedDescription)
     }
@@ -193,11 +253,15 @@ extension Renderer: MTKViewDelegate {
           let drawable = view.currentDrawable else {
       return
     }
+    
+    renderEncoder.setFragmentBytes(&fogEnabled, length: MemoryLayout<Bool>.size, index: 1)
+    
     renderEncoder.setCullMode(.none)
     renderEncoder.setDepthStencilState(depthStencilState)
     
     // render terrain
     renderEncoder.setRenderPipelineState(pipelineState)
+//    renderEncoder.setScissorRect(MTLScissorRect(x: 500, y: 500, width: 600, height: 400))
     var modelViewProjectionMatrix = camera.projectionMatrix * camera.viewMatrix * terrainTransform.matrix
     renderEncoder.setVertexBytes(&modelViewProjectionMatrix, length: MemoryLayout<float4x4>.stride, index: 1)
     renderEncoder.setVertexBuffer(terrain.vertexBuffers[0].buffer, offset: 0, index: 0)
@@ -205,11 +269,34 @@ extension Renderer: MTKViewDelegate {
     draw(renderEncoder: renderEncoder, model: terrain)
     
     // render tree
+    renderEncoder.setFragmentBytes(&transparencyEnabled, length: MemoryLayout<Bool>.size, index: 0)
+//    renderEncoder.setRenderPipelineState(treePipelineState)
+    
+    view.sampleCount = antialiasingEnabled ? 4 : 1
+    var aaPipelineState = antialiasingEnabled ? treePipelineStateAA : treePipelineState
+    renderEncoder.setRenderPipelineState(aaPipelineState!)
+    
     modelViewProjectionMatrix = camera.projectionMatrix * camera.viewMatrix * modelTransform.matrix
     renderEncoder.setVertexBytes(&modelViewProjectionMatrix, length: MemoryLayout<float4x4>.stride, index: 1)
     renderEncoder.setVertexBuffer(model.vertexBuffers[0].buffer, offset: 0, index: 0)
     renderEncoder.setFragmentTexture(texture, index: 0)
     draw(renderEncoder: renderEncoder, model: model)
+    
+//    renderEncoder.setRenderPipelineState(windowPipelineState)
+    aaPipelineState = antialiasingEnabled ? windowPipelineStateAA : windowPipelineState
+    renderEncoder.setRenderPipelineState(aaPipelineState!)
+    
+    
+    modelViewProjectionMatrix = camera.projectionMatrix * camera.viewMatrix * windowTransform.matrix
+    renderEncoder.setVertexBytes(&modelViewProjectionMatrix, length: MemoryLayout<float4x4>.stride, index: 1)
+    renderEncoder.setVertexBuffer(window.vertexBuffers[0].buffer, offset: 0, index: 0)
+    renderEncoder.setFragmentTexture(windowTexture, index: 0)
+    renderEncoder.setFragmentBytes(&blendingEnbled, length: MemoryLayout<Bool>.size, index: 0)
+    draw(renderEncoder: renderEncoder, model: window)
+ 
+    modelViewProjectionMatrix = camera.projectionMatrix * camera.viewMatrix * window2Transform.matrix
+    renderEncoder.setVertexBytes(&modelViewProjectionMatrix, length: MemoryLayout<float4x4>.stride, index: 1)
+    draw(renderEncoder: renderEncoder, model: window)
     
     renderEncoder.endEncoding()
     commandBuffer.present(drawable)

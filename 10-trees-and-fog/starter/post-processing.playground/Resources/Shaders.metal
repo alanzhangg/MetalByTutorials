@@ -53,10 +53,66 @@ vertex VertexOut vertex_main(const VertexIn vertex_in [[stage_in]],
   return vertex_out;
 }
 
+vertex VertexOut vertex_light(const VertexIn vertex_in [[stage_in]],
+                              constant float4x4 & mvp_matrix [[buffer(1)]]){
+    VertexOut vertex_out;
+    vertex_out.position = mvp_matrix * vertex_in.position;
+    vertex_out.uv = vertex_in.uv;
+    vertex_out.normal = (mvp_matrix * float4(vertex_in.normal, 0)).xyz;
+    float3 light_direction = {1.0, 1.0, 1.0};
+    float4 light_color = float4(1.0);
+    float intensity = dot(normalize(vertex_out.normal), normalize(light_direction));
+    vertex_out.color = saturate(light_color * intensity);
+    return vertex_out;
+}
+
+float4 fog(float4 position, float4 color){
+    float distance = position.z / position.w;
+    float density = 0.2;
+    float fog = 1.0 - clamp(exp(-density * distance), 0.1, 1.0);
+    float4 fogColor = float4(1.0);
+    color = mix(color, fogColor, fog);
+    return color;
+}
+
 fragment float4 fragment_main(VertexOut vertex_in [[stage_in]],
-                              texture2d<float> texture [[texture(0)]])
-{
+                              texture2d<float> texture [[texture(0)]],
+                              constant bool &fogEnabled [[buffer(1)]]){
   constexpr sampler s(filter::linear);
   float4 color = texture.sample(s, vertex_in.uv);
+    if (fogEnabled){
+        color = fog(vertex_in.position, color);
+    }
   return color;
+}
+
+fragment float4 fragment_tree(VertexOut vertex_in [[stage_in]],
+                              texture2d<float> texture [[texture(0)]],
+                              constant bool & transparencyEnables [[buffer(0)]],
+                              constant bool &fogEnabled [[buffer(1)]]){
+    constexpr sampler s(filter::linear);
+    float4 color = texture.sample(s, vertex_in.uv);
+    if (transparencyEnables && color.a < 0.1){
+        discard_fragment();
+    }
+    color *= vertex_in.color * 0.8;
+    if (fogEnabled){
+        color = fog(vertex_in.position, color);
+    }
+    return color;
+}
+
+fragment float4 fragment_window(VertexOut vertex_in [[stage_in]],
+                                constant bool &blendingEnbled [[buffer(0)]],
+                                texture2d<float> texture [[texture(0)]],
+                                constant bool &fogEnabled [[buffer(1)]]){
+    constexpr sampler s(filter::linear);
+    float4 color = texture.sample(s, vertex_in.uv);
+    if (blendingEnbled){
+        color.a = 0.5;
+    }
+    if (fogEnabled){
+        color = fog(vertex_in.position, color);
+    }
+    return color;
 }

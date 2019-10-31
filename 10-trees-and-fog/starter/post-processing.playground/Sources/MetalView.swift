@@ -53,4 +53,28 @@ public class MetalView: MTKView {
   public override func scrollWheel(with event: NSEvent) {
     renderer?.zoomUsing(delta: event.deltaY)
   }
+    public override var acceptsFirstResponder: Bool{
+        return true
+    }
+    public override func keyDown(with event: NSEvent){
+        enum KeyCode: UInt16{
+            case t = 0x11
+            case b = 0xB
+            case a = 0
+            case f = 0x3
+        }
+        guard let renderer = renderer, let keyCode = KeyCode(rawValue: event.keyCode) else {
+            return
+        }
+        switch keyCode {
+        case .t:
+            renderer.transparencyEnabled = !renderer.transparencyEnabled
+        case .b:
+            renderer.blendingEnbled = !renderer.blendingEnbled
+        case .a:
+            renderer.antialiasingEnabled = !renderer.antialiasingEnabled
+        case .f:
+            renderer.fogEnabled = !renderer.fogEnabled
+        }
+    }
 }
