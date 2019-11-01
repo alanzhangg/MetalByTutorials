@@ -53,27 +53,28 @@ vertex VertexOut vertex_main(patch_control_point<ControlPoint> control_points [[
     float u = patch_coord.x;
     float v = patch_coord.y;
     
+    VertexOut out;
     float2 top = mix(control_points[0].position.xz, control_points[1].position.xz, u);
     float2 bottom = mix(control_points[3].position.xz, control_points[2].position.xz, u);
-    float2 interpolated = mix(top, bottom, v);
-    float4 position = float4(interpolated.x, 0, interpolated.y, 1.0);
+    float2 interPolated = mix(top, bottom, v);
+    float4 position = float4(interPolated.x, 0.0, interPolated.y, 1.0);
     // 1
     float2 xy = (position.xz + terrain.size / 2.0) / terrain.size;
     // 2
     constexpr sampler sample;
     float4 color = heightMap.sample(sample, xy);
-    
-    VertexOut out;
     out.color = float4(color.r);
-    
-    // 3
     float height = (color.r * 2 - 1) * terrain.height;
     position.y = height;
     out.position = mvp * position;
     
     out.uv = xy;
     out.height = height;
-    
+//    out.position = mvp * position;
+//    out.color = float4(0);
+//    if (pid == 0){
+//        out.color = float4(1, 0, 0, 1);
+//    }
     return out;
 }
 
@@ -105,35 +106,35 @@ float calc_distance(float3 pointA, float3 pointB,
     return camera_distance;
 }
 
-kernel void tessellation_main(constant float *edge_factors [[ buffer(0) ]],
-                              constant float *inside_factors [[ buffer(1) ]],
-                              device MTLQuadTessellationFactorsHalf *factors [[ buffer(2) ]],
-                              constant float4 &camera_position [[ buffer(3) ]],
-                              constant float4x4 &modelMatrix   [[ buffer(4) ]],
-                              constant float3* control_points  [[ buffer(5) ]],
-                              constant Terrain &terrain        [[ buffer(6) ]],
-                              uint pid [[ thread_position_in_grid]])
-{
+kernel void tessellation_main(constant float* edge_factors [[buffer(0)]],
+                              constant float* inside_factors [[buffer(1)]],
+                              device MTLQuadTessellationFactorsHalf* factors [[buffer(2)]],
+                              uint pid [[thread_position_in_grid]],
+                              constant float4 &camera_position [[buffer(3)]],
+                              constant float4x4 & modelMatrix [[buffer(4)]],
+                              constant float3 *control_points [[buffer(5)]],
+                              constant Terrain &terrain [[buffer(6)]]){
+//    factors[pid].edgeTessellationFactor[0] = edge_factors[0];
+//    factors[pid].edgeTessellationFactor[1] = edge_factors[1];
+//    factors[pid].edgeTessellationFactor[2] = edge_factors[2];
+//    factors[pid].edgeTessellationFactor[3] = edge_factors[3];
+//
+//    factors[pid].insideTessellationFactor[0] = inside_factors[0];
+//    factors[pid].insideTessellationFactor[1] = inside_factors[1];
     uint index = pid * 4;
     float totalTessellation = 0;
-    
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++){
         int pointAIndex = i;
         int pointBIndex = i + 1;
-        if (pointAIndex == 3) {
+        if (pointAIndex == 3){
             pointBIndex = 0;
         }
         int edgeIndex = pointBIndex;
-        
-        float cameraDistance = calc_distance(control_points[pointAIndex + index],
-                                             control_points[pointBIndex + index],
-                                             camera_position.xyz,
-                                             modelMatrix);
+        float cameraDistance = calc_distance(control_points[pointAIndex + index], control_points[pointBIndex + index], camera_position.xyz, modelMatrix);
         float tessellation = max(4.0, terrain.maxTessellation / cameraDistance);
         factors[pid].edgeTessellationFactor[edgeIndex] = tessellation;
         totalTessellation += tessellation;
     }
-    
     factors[pid].insideTessellationFactor[0] = totalTessellation * 0.25;
     factors[pid].insideTessellationFactor[1] = totalTessellation * 0.25;
 }

@@ -27,6 +27,7 @@
 /// THE SOFTWARE.
 
 import MetalKit
+import MetalPerformanceShaders
 
 class Renderer: NSObject {
     
@@ -54,7 +55,7 @@ class Renderer: NSObject {
     }
     
     var edgeFactors: [Float] = [2, 4, 8, 16]
-    var insideFactors: [Float] = [4]
+    var insideFactors: [Float] = [4, 8]
     
     var terrain = Terrain(size: [8, 8], height: 1, maxTessellation: UInt32(Renderer.maxTessellation))
     
@@ -110,7 +111,7 @@ class Renderer: NSObject {
                                              blue: 1, alpha: 1)
         metalView.delegate = self
         
-        let controlPoints = createControlPoints(patches: patches, size: (terrain.size.x, terrain.size.y))
+        let controlPoints = createControlPoints(patches: patches, size: (width: terrain.size.x, height: terrain.size.y))
         controlPointsBuffer = Renderer.device.makeBuffer(bytes: controlPoints, length: MemoryLayout<float3>.stride * controlPoints.count)
     }
     
@@ -154,6 +155,9 @@ class Renderer: NSObject {
         return try!
             Renderer.device.makeComputePipelineState(function: kernelFunction)
     }
+//    static func heightToSlope(source: MTLTexture) -> MTLTexture{
+//
+//    }
 }
 
 extension Renderer: MTKViewDelegate {
