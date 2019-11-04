@@ -39,6 +39,7 @@ class Scene {
   var camera: Camera {
     return cameras[currentCameraIndex]
   }
+    var skybox:Skybox?
   
   let rootNode = Node()
   var renderables: [Renderable] = []

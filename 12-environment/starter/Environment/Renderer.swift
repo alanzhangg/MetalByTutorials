@@ -114,7 +114,7 @@ extension Renderer: MTKViewDelegate {
     }
 
     // render skybox
-    
+    scene.skybox?.render(renderEncoder: renderEncoder, uniforms: scene.uniforms)
     
     renderEncoder.endEncoding()
     guard let drawable = view.currentDrawable else {

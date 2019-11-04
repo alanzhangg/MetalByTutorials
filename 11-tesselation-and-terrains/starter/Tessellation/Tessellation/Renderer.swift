@@ -60,6 +60,8 @@ class Renderer: NSObject {
     var terrain = Terrain(size: [8, 8], height: 1, maxTessellation: UInt32(Renderer.maxTessellation))
     
     let heightMap: MTLTexture
+    let terrainSlope: MTLTexture
+    
     
     lazy var tessellationFactorsBuffer: MTLBuffer? = {
         let count = patchCount * (4 + 2)
@@ -105,6 +107,7 @@ class Renderer: NSObject {
         } catch {
             fatalError(error.localizedDescription)
         }
+        terrainSlope = Renderer.heightToSlope(source: heightMap)
         
         super.init()
         metalView.clearColor = MTLClearColor(red: 1, green: 1,
@@ -155,9 +158,20 @@ class Renderer: NSObject {
         return try!
             Renderer.device.makeComputePipelineState(function: kernelFunction)
     }
-//    static func heightToSlope(source: MTLTexture) -> MTLTexture{
-//
-//    }
+    static func heightToSlope(source: MTLTexture) -> MTLTexture{
+        let descriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: source.pixelFormat,
+                                                                  width: source.width,
+                                                                  height: source.height,
+                                                                  mipmapped: false)
+        descriptor.usage = [.shaderWrite, .shaderRead]
+        guard let destination = Renderer.device.makeTexture(descriptor: descriptor), let commandBuffer = Renderer.commandQueue.makeCommandBuffer() else { fatalError() }
+        let shader = MPSImageSobel(device: Renderer.device)
+        shader.encode(commandBuffer: commandBuffer,
+                      sourceTexture: source,
+                      destinationTexture: destination)
+        commandBuffer.commit()
+        return destination
+    }
 }
 
 extension Renderer: MTKViewDelegate {

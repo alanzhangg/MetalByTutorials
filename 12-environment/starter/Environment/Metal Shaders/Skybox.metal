@@ -1,3 +1,4 @@
+//
 /**
  * Copyright (c) 2018 Razeware LLC
  *
@@ -28,21 +29,29 @@
  * THE SOFTWARE.
  */
 
-import Foundation
 
-class SkyScene: Scene {
-  let ground = Prop(name: "large-plane")
-  let car = Prop(name: "racing-car")
-  
-  override func setupScene() {
-    skybox = Skybox(textureName: nil)
-    ground.tiling = 16
-    add(node: ground)
-    add(node: car)
-    
-    inputController.player = camera
-    camera.rotation.y = .pi / 2
-    camera.position.x = -3
-    camera.position.y = 1
-  }
+#include <metal_stdlib>
+#include "Common.h"
+using namespace metal;
+
+struct VertexIn{
+    float4 position [[ attribute(0) ]];
+};
+
+struct VertexOut{
+    float4 position [[position]];
+};
+
+vertex VertexOut vertexSkybox(const VertexIn in [[stage_in]],
+                              constant float4x4 &vp [[buffer(1)]]){
+    VertexOut out;
+    out.position = (vp * in.position).xyww;
+    return out;
 }
+
+fragment half4 fragmentSkybox(VertexOut in [[stage_in]]){
+    return half4(1, 1, 0, 1);
+}
+
+
+

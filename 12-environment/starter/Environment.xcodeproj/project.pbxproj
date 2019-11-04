@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4BC42DD3237016C600ABEE63 /* Skybox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC42DD2237016C600ABEE63 /* Skybox.swift */; };
+		4BC42DD42370174800ABEE63 /* Skybox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC42DD2237016C600ABEE63 /* Skybox.swift */; };
+		4BC42DD62370236C00ABEE63 /* Skybox.metal in Sources */ = {isa = PBXBuildFile; fileRef = 4BC42DD52370236C00ABEE63 /* Skybox.metal */; };
 		8200EF8D20A9503400235737 /* large-plane.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 8200EF8B20A9503400235737 /* large-plane.mtl */; };
 		8200EF8E20A9503400235737 /* large-plane.obj in Resources */ = {isa = PBXBuildFile; fileRef = 8200EF8C20A9503400235737 /* large-plane.obj */; };
 		82330E1420AFA620001CBFEF /* large-plane.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 8200EF8B20A9503400235737 /* large-plane.mtl */; };
@@ -90,6 +93,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4BC42DD2237016C600ABEE63 /* Skybox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Skybox.swift; sourceTree = "<group>"; };
+		4BC42DD52370236C00ABEE63 /* Skybox.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Skybox.metal; sourceTree = "<group>"; };
 		8200EF8B20A9503400235737 /* large-plane.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "large-plane.mtl"; sourceTree = "<group>"; };
 		8200EF8C20A9503400235737 /* large-plane.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "large-plane.obj"; sourceTree = "<group>"; };
 		82330E3620B125D1001CBFEF /* PhysicsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsController.swift; sourceTree = "<group>"; };
@@ -220,6 +225,7 @@
 				CD280D8A20FDA8B100893622 /* SkyScene.swift */,
 				824160D020B3009800C24A28 /* Scene.swift */,
 				8278FC5A20651EEA00D81B41 /* Texturable.swift */,
+				4BC42DD2237016C600ABEE63 /* Skybox.swift */,
 				82DDA8DB2090505500EB2A9B /* Metal Shaders */,
 				CD731D9A21003B0100675422 /* Textures */,
 				829705D820340D3900AE03CB /* Utility */,
@@ -298,6 +304,7 @@
 				CDB0387520EB378600212D57 /* Terrain.metal */,
 				82DDA8D520904EBF00EB2A9B /* CharacterShaders.metal */,
 				82725C4320340E07007BA98D /* Common.h */,
+				4BC42DD52370236C00ABEE63 /* Skybox.metal */,
 			);
 			path = "Metal Shaders";
 			sourceTree = "<group>";
@@ -468,6 +475,7 @@
 				82F2C22D204518D40082FDE6 /* Node.swift in Sources */,
 				82A270DD1FB9123C004D47F2 /* ViewController.swift in Sources */,
 				CDC49C9B2106B10F00C58EF6 /* BRDF.metal in Sources */,
+				4BC42DD62370236C00ABEE63 /* Skybox.metal in Sources */,
 				829618581FB943BD00CBB303 /* Renderer.swift in Sources */,
 				82506A1620411D5F00D21A0B /* ViewControllerExtension.swift in Sources */,
 				82B006872099209B00F58681 /* GLTFTypes.swift in Sources */,
@@ -484,6 +492,7 @@
 				82506A1B20411DB100D21A0B /* RendererExtension.swift in Sources */,
 				829705DA20340D4A00AE03CB /* MathLibrary.swift in Sources */,
 				CDC49C9C2106B10F00C58EF6 /* RendererBRDF.swift in Sources */,
+				4BC42DD3237016C600ABEE63 /* Skybox.swift in Sources */,
 				82330E3720B125D1001CBFEF /* PhysicsController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -499,6 +508,7 @@
 				829618541FB91EB200CBB303 /* LocalClasses.swift in Sources */,
 				CD280D9220FDAEEE00893622 /* PBR.metal in Sources */,
 				82B006842099209B00F58681 /* GLTFAsset.swift in Sources */,
+				4BC42DD42370174800ABEE63 /* Skybox.swift in Sources */,
 				829618591FB9441D00CBB303 /* Renderer.swift in Sources */,
 				82B0068A2099233F00F58681 /* Renderable.swift in Sources */,
 				CD06957220D3279400E8A206 /* InputController.swift in Sources */,
