@@ -33,8 +33,15 @@
 import Foundation
 import MetalKit
 class Skybox{
+    struct SkySettinga {
+        var turbidity: Float = 0.28
+        var sunElevation: Float = 0.6
+        var upperAtmosphereScattering: Float = 0.1
+        var groundAlbedo: Float = 4
+    }
+    var skySettings = SkySettinga()
     let mesh: MTKMesh
-    let texture: MTLTexture? = nil
+    var texture: MTLTexture? = nil
     let pipelineState: MTLRenderPipelineState
     let depthStencilState: MTLDepthStencilState?
     
@@ -52,6 +59,11 @@ class Skybox{
         }
         pipelineState = Skybox.buildPipelineState(vertexDescriptor: cube.vertexDescriptor)
         depthStencilState = Skybox.buildDepthStencilState()
+        if let textureName = textureName {
+        
+        }else{
+            texture = loadGeneratedSkyboxTexture(dimensions: [256, 256])
+        }
     }
     
     func render(renderEncoder: MTLRenderCommandEncoder, uniforms: Uniforms) {
@@ -65,12 +77,31 @@ class Skybox{
         var viewProjectionMatric = uniforms.projectionMatrix * viewMatrix
         renderEncoder.setVertexBytes(&viewProjectionMatric, length: MemoryLayout<float4x4>.stride, index: 1)
         let submesh = mesh.submeshes[0]
+        renderEncoder.setFragmentTexture(texture, index: Int(BufferIndexSkybox.rawValue))
         renderEncoder.drawIndexedPrimitives(type: .triangle,
                                             indexCount: submesh.indexCount,
                                             indexType: submesh.indexType,
                                             indexBuffer: submesh.indexBuffer.buffer,
                                             indexBufferOffset: 0)
         
+    }
+    
+    func loadGeneratedSkyboxTexture(dimensions: int2) -> MTLTexture? {
+        var texture: MTLTexture?
+        let skyTexture = MDLSkyCubeTexture(name: "sky",
+                                           channelEncoding: .uInt8,
+                                           textureDimensions: dimensions,
+                                           turbidity: skySettings.turbidity,
+                                           sunElevation: skySettings.sunElevation,
+                                           upperAtmosphereScattering: skySettings.upperAtmosphereScattering,
+                                           groundAlbedo: skySettings.groundAlbedo)
+        do{
+            let textureLoader = MTKTextureLoader(device: Renderer.device)
+            texture = try textureLoader.newTexture(texture: skyTexture, options: nil)
+        }catch{
+            print(error.localizedDescription)
+        }
+        return texture
     }
     
     private static func buildPipelineState(vertexDescriptor: MDLVertexDescriptor) -> MTLRenderPipelineState{
