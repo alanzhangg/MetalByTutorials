@@ -21,7 +21,7 @@ let allocator = MTKMeshBufferAllocator(device: device)
 //                      cap: true,
 //                      geometryType: .triangles,
 //                      allocator: allocator)
-guard let assetURL = Bundle.main.url(forResource: "train", withExtension: "obj") else {
+guard let assetURL = Bundle.main.url(forResource: "mushroom", withExtension: "obj") else {
     fatalError()
 }
 let vertexDescriptor = MTLVertexDescriptor()
